@@ -16,15 +16,11 @@ In the `iex` shell use the functions provided by GenServer module to interact wi
 
 Start the process:
 
-<!-- livebook:{"force_markdown":true} -->
-
 ```elixir
 > {:ok, pid} = GenServer.start(Frequency, [])
 ```
 
 Issue `allocate` and `deallocate` calls:
-
-<!-- livebook:{"force_markdown":true} -->
 
 ```elixir
 > GenServer.call(pid, :allocate)
@@ -32,8 +28,6 @@ Issue `allocate` and `deallocate` calls:
 ```
 
 Stop the process:
-
-<!-- livebook:{"force_markdown":true} -->
 
 ```elixir
 > GenServer.stop(pid)
@@ -68,8 +62,6 @@ Then we are able to leverage more complex mechanisms to validate data or be more
 
 In the `03-gen_server/frequency/lib` directory, create `user_cache.ex` file with the following contents:
 
-<!-- livebook:{"force_markdown":true} -->
-
 ```elixir
 defmodule UserCache do
   use GenServer
@@ -83,8 +75,6 @@ end
 
 The state that will be stored by this process will be represented by two nested structures. The first one:
 
-<!-- livebook:{"force_markdown":true} -->
-
 ```elixir
 defmodule State do
   defstruct [:amount, :users]
@@ -92,8 +82,6 @@ end
 ```
 
 And the User structure:
-
-<!-- livebook:{"force_markdown":true} -->
 
 ```elixir
 defmodule User do
@@ -104,8 +92,6 @@ end
 **NOTE:** Such state structures might be more complex, could live in a different directory, and so on. For the sake of the exercise we are putting them in the same module.
 
 Now that we have structures that will hold the state, we can update implementation of the GenServer:
-
-<!-- livebook:{"force_markdown":true} -->
 
 ```elixir
 defmodule UserCache do

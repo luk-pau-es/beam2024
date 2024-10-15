@@ -32,8 +32,6 @@ For convenience, the tables are named according to the type they represent:
 
 ### Commands
 
-<!-- livebook:{"force_markdown":true} -->
-
 ```elixir
 :ets.new(:set_table, [:set, :public, :named_table])
 :ets.insert(:set_table, {1, "alice"})
@@ -48,6 +46,8 @@ For convenience, the tables are named according to the type they represent:
 :ets.insert(:duplicate_bag_table, {1, "alice"})
 :ets.insert(:duplicate_bag_table, {1, "bob"})
 ```
+
+<div style="page-break-after: always;"></div>
 
 ## ETS access
 
@@ -77,6 +77,8 @@ $ iex -S mix
 ```
 
 For each module call each available function with different table names and observe results.
+
+<div style="page-break-after: always;"></div>
 
 ## ETS matching
 
