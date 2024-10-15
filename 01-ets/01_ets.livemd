@@ -57,7 +57,7 @@ Similarly to the previous section you are provided with three different tables, 
 
 Moreover, to better showcase access patterns for different ETS tables, you are also provided with three preconfigured modules with client APIs that allow for communication with or between the tables.
 
-NOTE:
+**NOTE:**
 The modules used in this exercise define a GenServer (a type of process) that will keep ETS table in memory. At this stage, only concern yourself with ETS function - GenServer is a separate topic that will be covered later.
 
 #### Client API

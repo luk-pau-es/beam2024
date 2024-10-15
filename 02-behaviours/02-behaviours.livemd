@@ -34,7 +34,9 @@ Then we can use the provided `allocate/0` and `deallocate/1` functions to intera
 > Frequency.stop()
 ```
 
-QUESTION: What will happen if you try to start Frequency one more time?
+#### Question
+
+What will happen if you try to start Frequency one more time?
 
 ### Frequency2 and Server modules
 
