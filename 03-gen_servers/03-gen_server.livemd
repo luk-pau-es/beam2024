@@ -4,7 +4,7 @@
 
 In the folder `03-gen_server`, you will find `frequency` project with an implemented GenServer.
 
-Start the `iex` shell inside the project by running
+Start the `iex` shell inside the project by running:
 
 ```bash
 $ iex -S mix
@@ -12,7 +12,7 @@ $ iex -S mix
 
 Compare the GenServer implementation with `Frequency` and `Frequency2` modules from the previous lesson.
 
-In the `iex` shell use the functions provided by GenServer module to interact with `Frequency` GenServer.
+In the `iex` shell use the functions provided by GenServer module to interact with the `Frequency` GenServer.
 
 Start the process:
 
@@ -22,7 +22,7 @@ Start the process:
 > {:ok, pid} = GenServer.start(Frequency, [])
 ```
 
-Issue `allocate` or `deallocate` call
+Issue `allocate` and `deallocate` calls:
 
 <!-- livebook:{"force_markdown":true} -->
 
@@ -45,23 +45,28 @@ Is it possible to start multiple `Frequency` GenServers? If yes, why?
 
 #### Useful tips
 
-* You can use Observer to visually inspect the `Frequency` GenServer
+* You can use Observer to visually inspect the `Frequency` GenServer:
+
   ```elixir
   > :observer.start()
   ```
-* If Observer isn't working for some reason you can use `:sys.get_state/1` to get information about current state of the process
+
+* If Observer isn't working for some reason you can use `:sys.get_state/1` to get information about the current state of the process:
+
   ```elixir
-  {:ok, pid} = GenServer.start(Frequency, [])
-  :sys.get_state(pid)
+  > {:ok, pid} = GenServer.start(Frequency, [])
+  > :sys.get_state(pid)
   ```
 
 ## GenServer 2
 
-So far when implementing GenServers we have used simple data structures (maps) to store state, but in the real world scenario state can be more complex than that, we can easily add a layer of control by passing Elixir struct as a state, then we are able to leverage more complex mechanisms to validate data or be more descriptive of what we store in the state.
+So far when implementing GenServers we have used simple data structures (maps) to store state, but in the real world state can be more complex than that.
+We can easily add a layer of control by passing an Elixir struct as a state.
+Then we are able to leverage more complex mechanisms to validate data or be more descriptive about our state data.
 
 #### GenServer: UserCache
 
-In the `03-gen_server/frequency/lib` directory, create `user_cache.ex` file.
+In the `03-gen_server/frequency/lib` directory, create `user_cache.ex` file with the following contents:
 
 <!-- livebook:{"force_markdown":true} -->
 
@@ -76,7 +81,7 @@ defmodule UserCache do
 end
 ```
 
-The state that will be stored by this process will be represented by two nested structures, frist one:
+The state that will be stored by this process will be represented by two nested structures. The first one:
 
 <!-- livebook:{"force_markdown":true} -->
 
@@ -86,7 +91,7 @@ defmodule State do
 end
 ```
 
-And user structure:
+And the User structure:
 
 <!-- livebook:{"force_markdown":true} -->
 
@@ -96,7 +101,7 @@ defmodule User do
 end
 ```
 
-**NOTE** Usually these structures could be more complex, could live in different directory etc. but for the sake of of the exercise we are putting them in the same module as the GenServer
+**NOTE:** Such state structures might be more complex, could live in a different directory, and so on. For the sake of the exercise we are putting them in the same module.
 
 Now that we have structures that will hold the state, we can update implementation of the GenServer:
 
@@ -123,6 +128,6 @@ end
 
 #### Exercises
 
-* Add `handle_call/3` implementation that will add new user to the cache, example input: `{:add, 1, "Name"}`, output: `:ok`, state modification: new user is added to the `users` list, `amount` is increased by 1
-* Add `handle_call/3` to fetch current state
-* Add `handle_call/3` to delete user from the cache, input: `{:remove, 1}`, output: `:ok,` state mpdification: `amount` decreased by 1, user with specified id should be removed from the `users` list
+* Add `handle_call/3` implementation that will add a new user to the cache. Example input: `{:add, 1, "Name"}`, output: `:ok`, state modification: a new user is added to the `users` list, `amount` is increased by 1.
+* Add `handle_call/3` to fetch the current state.
+* Add `handle_call/3` to delete a user from the cache. Input: `{:remove, 1}`, output: `:ok`, state modification: `amount` decreased by 1, the user with the specified id should be removed from the `users` list.
