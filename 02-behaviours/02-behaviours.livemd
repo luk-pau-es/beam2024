@@ -4,11 +4,9 @@
 
 ### Setup
 
-This and following exercises assume that the default location is repository folder `beam2024`.
+All commands should be run either in an operating system shell (commands beginning with `$`) or in `iex`, the Elixir shell (commands beginning with `>`).
 
-All commands should be run inside either a terminal shell (commands will beging with `$`) or inside iex shell(commands will begin with `>`).
-
-For this segment working directory is `frequency` folder in `02-behabiours` location.
+This and the following exercises assume that the current working directory is set to either the  `beam2024` repository or one of its subdirectories. We'll start in `02-behaviours/frequency`.
 
 ### How to start
 
@@ -20,8 +18,7 @@ $ iex -S mix
 
 ### Frequency module
 
-Module implements `process skeleton` described during presentation, that is used on multiple occasions when working with OTP components of Elixir/Erlang languages.
-The process can be started by calling:
+The Frequency module implements a _process skeleton_ described in the presentation. This skeleton is used on multiple occasions when working with OTP components in Elixir or Erlang. The process can be started by calling:
 
 <!-- livebook:{"force_markdown":true} -->
 
@@ -29,7 +26,7 @@ The process can be started by calling:
 > Frequency.start()
 ```
 
-Then use provided `allocate/0` and `deallocate/1` functions to interact with the process. To stop the processes call
+Then we can use the provided `allocate/0` and `deallocate/1` functions to interact with the process. To stop the process call:
 
 <!-- livebook:{"force_markdown":true} -->
 
@@ -37,13 +34,13 @@ Then use provided `allocate/0` and `deallocate/1` functions to interact with the
 > Frequency.stop()
 ```
 
-QUESTION: What will happen if you try to start Frequency second time?
+QUESTION: What will happen if you try to start Frequency one more time?
 
 ### Frequency2 and Server modules
 
-`Server` module implements common behaviour of our `process skeleton`, it contains functions like `start/2`, `stop/1`, `init/2`, `loop/2` and `call/2`. In this module two callbacks (`init/1` and `handle/2`) are also defnied, those functions will be implemented in `Frequency2` module (or any other module using `Server` as it's behaviour). This decauples generic part (e.g. process management, listening for messages etc.) from our specific part - allocating and deallocating frequencies.
+`Server` module implements a common behaviour of our process skeleton. It contains functions like `start/2`, `stop/1`, `init/2`, `loop/2` and `call/2`. In this module two callbacks (`init/1` and `handle/2`) are also defined, those functions will be implemented in `Frequency2` module (or any other module using `Server` as its behaviour). This decouples the generic part (e.g. process management, listening for messages etc.) from our specific part - allocating and deallocating frequencies.
 
-Since the logic to handle process and it's information is moved into separate module interacting with `Frequency2` module is slightly different than in the first example, namely management will be done by `Serve` module, so things like start or stop. We can still use `Frequency2` module to call `allocate/0` and `deallocate/1` function.
+Since the logic to handle process and it's information is moved into a separate module, interacting with `Frequency2` module is slightly different than in the first example. Namely, process management, so things like starting or stopping, will be done by the `Serve` module. We can still use `Frequency2` module to call the `allocate/0` and `deallocate/1` functions.
 
 To start the process use:
 
@@ -53,28 +50,28 @@ To start the process use:
 > {:ok, pid} = Server.start(Frequency2, [])
 ```
 
-Stoping the process:
+Allocating a frequency:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+> Frequency2.allocate()
+```
+
+Deallocating a frequency:
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+> Frequency2.deallocate(10)
+```
+
+Finally, to stop the process:
 
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
 > Server.stop(pid)
-```
-
-Allocating frequency:
-
-<!-- livebook:{"force_markdown":true} -->
-
-```elixir
-Frequency2.allocate()
-```
-
-Deallocating frequency:
-
-<!-- livebook:{"force_markdown":true} -->
-
-```elixir
-Frequency2.deallocate(10)
 ```
 
 ## Other uses
@@ -85,6 +82,6 @@ However, this is not always the primary use case. Another common use case is to 
 
 A typical example is modules that handle communication with third-party APIs. Often, we do not need or want a live API implementation when running tests, or even during development.
 
-Your task is to create a module named `*_behaviour.ex` with 2 or 3 callbacks. Optionally, you can also implement default function specifications using defmacro and `__using__`.
+Your task is to create a module named `*_behaviour.ex` with 2 or 3 callbacks. Optionally, you can also implement default function specifications using `defmacro` and `__using__`.
 
-In the next step, create two modules that implement the behavior defined in the previous step.
+In the next step create two modules that implement the behavior defined in the previous step.

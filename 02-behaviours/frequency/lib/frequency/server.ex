@@ -4,7 +4,7 @@ defmodule Server do
       @behaviour Server
       @impl Server
       def handle(_message, state) do
-        {state, {:error, :no_implemented}}
+        {state, {:error, :not_implemented}}
       end
 
       defoverridable handle: 2
