@@ -12,9 +12,9 @@ The project was generated as an umbrella application. Feel free to explore folde
 $ mix phx.new eco --no-mailer --no-ecto --umbrella --no-gettext
 ```
 
-A key point to note is that this project was created as a Phoenix application rather than a pure Elixir application. The command accepts the same parameters as `mix new`, along with additional options for managing components such as GetText for internationalization or mailer functionality.
+A key point to note is that this project was created as a Phoenix application rather than a pure Elixir application. The command accepts the same parameters as `mix new`, along with additional options for managing components such as Gettext for internationalization or mailer functionality.
 
-To ensure you have hex and Phoenix, execute the following commands:
+To ensure you have Hex and Phoenix, execute the following commands:
 
 ```bash
 $ mix local.hex
@@ -27,7 +27,7 @@ Next, set up the application (using a predefined alias in the `mix.exs` file):
 $ mix setup
 ```
 
-To verify that everything is running smoothly, start the server with, and navigate to `localhost:4000` in the browser:
+To verify that everything is running smoothly run the below command and navigate to `localhost:4000` in the browser:
 
 ```bash
 $ iex -S mix phx.server
@@ -35,7 +35,7 @@ $ iex -S mix phx.server
 
 ## Goals
 
-The application revolves around submitting sample data to process it with GenStage and finally assigning star to respective bin depending on the string contents.
+The application revolves around submitting sample data to process it with GenStage and finally assigning a star to a respective bin depending on the string contents.
 
 ### Data processing pipeline
 
@@ -45,7 +45,7 @@ The application expects data to be submitted via a form, located in the template
 
 #### Outputs
 
-The pipeline should publish an event on the topic: `recyclables` with the payload: `{:recycled, sign}` using Phoenix.PubSub.
+The pipeline should publish an event on the `recyclables` topic with a `{:recycled, sign}` payload using Phoenix.PubSub.
 
 #### Producing events - Producer / Source
 
@@ -71,7 +71,7 @@ end
 
 To correctly initialize the producer, return `{:producer, initial_state, dispatcher: GenStage.BroadcastDispatcher}` from the `init/1` function.
 
-Since we want to leverage the abilities of GenStage to dispatch events automatically as they come in, we don't need a complex `handle_demand/2` implementation. Set the return value to: `{:noreply, [], state}`.
+Since we want to leverage the abilities of GenStage to dispatch events automatically as they come in, we don't need a complex `handle_demand/2` implementation. Set the return value to `{:noreply, [], state}`.
 
 To dispatch events down the pipeline, using the form input from the user, we will add `handle_call/3`. Add the following functions:
 
@@ -90,11 +90,11 @@ end
 
 As mentioned in the Inputs section, our data at this point should be the submitted string. To simulate batch processing, split the string into a list of single letters.
 
-For example, if the input is "ACTGMGPBNHDACT", the output value for the events variable should be `["M", "P", "G", ...]`. Note that at this stage, we are only generating events; no additional data processing is taking place here.
+For example, if the input is "ACTGMGPBNHDACT", the output value for the events variable should be `["A", "C", "T", ...]`. Note that at this stage, we are only generating events; no additional data processing is taking place here.
 
 #### Event data processing
 
-In the `apps/eco/lib/eco/` directory, create a `producer_consumer.ex` file. This will correspond to the GenStage `producer_consumer`, a stage where our data will undergo transformation. Here, the data will be converted from case-insensitive to case-sensitive, and some values will be discarded. The general structure should be something like this:
+In the `apps/eco/lib/eco/` directory, create a `producer_consumer.ex` file. This will correspond to the GenStage `producer_consumer`, a stage where our data will undergo transformation. Here, the data will be converted to upper case and some values will be discarded. The general structure should be something like this:
 
 <!-- livebook:{"force_markdown":true} -->
 
@@ -119,13 +119,13 @@ end
 
 The `start_link/1` is implemented to allow us to incorporate the `ProducerConsumer` module into the supervision tree.
 
-The `init/1` function marks the process as a producer_consumer and subscribes it to the `Eco.Source` module.
+The `init/1` function marks the process as a `:producer_consumer` and subscribes it to the `Eco.Source` module.
 
-In `handle_events/3`, implement the event processing logic, which will be published to the consumer. As mentioned earlier, we want the event content to be case-sensitive. Therefore, apply String.upcase/1 to the event content and discard any events whose content is not included in the list `["A", "C", "T", "G"]`.
+In `handle_events/3`, implement the event processing logic - these events will be published to the consumer. Since the event content is case-insensitive, we can freely change its case to facilitate comparison with exemplary data. Apply `String.upcase/1` to the event content and discard any events whose content is not included in the list `["A", "C", "T", "G"]`.
 
 #### Consume events
 
-In the `apps/eco/lib/eco/` directory, create a `sink.ex` file. This module will consume events produced by the previous stages. The general module implementation:
+In the `apps/eco/lib/eco/` directory, create a `sink.ex` file. This module will consume events produced by the previous stages. Here's the general module implementation:
 
 <!-- livebook:{"force_markdown":true} -->
 
@@ -151,11 +151,11 @@ end
 
 The `start_link/1` is implemented to allow us to incorporate the `Sink` module into the supervision tree.
 
-The `init/1` function marks the process as a consumer and subscribes it to the `Eco.ProducerConsumer` module.
+The `init/1` function marks the process as a `:consumer` and subscribes it to the `Eco.ProducerConsumer` module.
 
 In `handle_events/3`, implement the logic to consume the list of events. At this stage, iterate over the `events` variable (similar to what we did in the `ProducerConsumer` module) and publish messages on a specific topic using `PubSub`.
 
-To publish messages, use: `Phoenix.PubSub.broadcast/3`. The topic to publish information to is `"recyclables"`, and the message format should be `{:recycled, sign}`, where sign is a value from the event.
+To publish messages, use `Phoenix.PubSub.broadcast/3`. The topic to publish information to is `"recyclables"` and the message format should be `{:recycled, sign}`, where `sign` is a value from the event.
 
 #### Tying it all up
 
@@ -173,7 +173,7 @@ children = [
 ]
 ```
 
-Lastly, in `index_live.ex`, modify the form submit event (remember to add and `alias`):
+Lastly, in `index_live.ex`, modify the form submit event (remember to add an `alias` to `Source`):
 
 <!-- livebook:{"force_markdown":true} -->
 
@@ -186,4 +186,4 @@ def handle_event("save", %{"sequence" => sequence}, socket) do
 
 #### Additional
 
-Start multiple `Sink` instances and modify `handle_event/3` function to sleep for random time between 0.5s and 2s with `Process.sleep(Enum.random(500..2000)), observe what happens
+Start multiple `Sink` instances, modify `handle_event/3` to sleep for a random time between 0.5s and 2s with `Process.sleep(Enum.random(500..2000))`, and observe what happens.
