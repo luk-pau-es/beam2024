@@ -10,8 +10,13 @@ defmodule Frequency do
   @impl true
   def handle_call(:allocate, from, state) do
     {pid, _tag} = from
-    {new_state, reply} = allocate(state, pid)
-    {:reply, reply, new_state}
+    # {new_state, reply} = allocate(state, pid)
+    state
+    |> allocate(pid)
+    |> case do
+      {[], {:error, _} = error} -> {:reply, error, state}
+      {new_state, reply} -> {:reply, reply, new_state}
+    end
   end
 
   def handle_call({:deallocate, freq}, _from, state) do
