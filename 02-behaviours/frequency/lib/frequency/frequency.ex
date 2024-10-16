@@ -31,7 +31,7 @@ defmodule Frequency do
         loop(frequencies)
 
       {:request, pid, :stop} ->
-        send(pid, :ok)
+        Process.exit(pid, :ok)
     end
   end
 
