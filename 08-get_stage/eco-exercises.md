@@ -75,15 +75,13 @@ Since we want to leverage the abilities of GenStage to dispatch events automatic
 
 To dispatch events down the pipeline, using the form input from the user, we will add `handle_call/3`. Add the following functions:
 
-<!-- livebook:{"force_markdown":true} -->
-
 ```elixir
 def start(event, timeout \\ 5000) do
   GenStage.call(__MODULE__, {:start, sequence}, timeout)
 end
 
 def handle_call({:start, sequence}, _from, state) do
-  events = [], 
+  events = [],
   {:reply, :ok, events, state}
 end
 ```
@@ -95,8 +93,6 @@ For example, if the input is "ACTGMGPBNHDACT", the output value for the events v
 #### Event data processing
 
 In the `apps/eco/lib/eco/` directory, create a `producer_consumer.ex` file. This will correspond to the GenStage `producer_consumer`, a stage where our data will undergo transformation. Here, the data will be converted to upper case and some values will be discarded. The general structure should be something like this:
-
-<!-- livebook:{"force_markdown":true} -->
 
 ```elixir
 defmodule Eco.ProducerConsumer do
@@ -126,8 +122,6 @@ In `handle_events/3`, implement the event processing logic - these events will b
 #### Consume events
 
 In the `apps/eco/lib/eco/` directory, create a `sink.ex` file. This module will consume events produced by the previous stages. Here's the general module implementation:
-
-<!-- livebook:{"force_markdown":true} -->
 
 ```elixir
 defmodule Eco.Sink do
@@ -161,8 +155,6 @@ To publish messages, use `Phoenix.PubSub.broadcast/3`. The topic to publish info
 
 Before our pipeline can accept the request, we need to include it in our application's children. To do so, modify the list of children in the `Eco.Application` module by adding the following:
 
-<!-- livebook:{"force_markdown":true} -->
-
 ```elixir
 children = [
   # ...
@@ -174,8 +166,6 @@ children = [
 ```
 
 Lastly, in `index_live.ex`, modify the form submit event (remember to add an `alias` to `Source`):
-
-<!-- livebook:{"force_markdown":true} -->
 
 ```elixir
 def handle_event("save", %{"sequence" => sequence}, socket) do
