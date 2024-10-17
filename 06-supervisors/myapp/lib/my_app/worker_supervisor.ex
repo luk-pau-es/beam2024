@@ -10,10 +10,11 @@ defmodule MyApp.WorkerSupervisor do
 
   @impl true
   def init(_init_arg) do
+    # fix typo
     childer = [
-      {MyApp.Worker1, []},
-      {MyApp.Worker2, []},
-      {MyApp.Worker3, []}
+      # {MyApp.Worker1, []},
+      # {MyApp.Worker2, []},
+      # {MyApp.Worker3, []}
     ]
 
     Supervisor.init(childer, strategy: :one_for_one)
