@@ -12,4 +12,8 @@ defmodule MyApp.DynamicSupervisor do
   def init(_init_arg) do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
+
+  def start_child(args) do
+    DynamicSupervisor.start_child(__MODULE__, {MyApp.Worker1, args})
+  end
 end

@@ -5,7 +5,7 @@ defmodule MyApp.Worker2 do
   use GenServer
   @step 2
 
-  def start_link(_init_args), do: GenServer.start(__MODULE__, 0, name: __MODULE__)
+  def start_link(_init_args), do: GenServer.start_link(__MODULE__, 0, name: __MODULE__)
 
   def value, do: GenServer.call(__MODULE__, :get_value)
 
